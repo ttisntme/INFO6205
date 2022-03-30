@@ -25,7 +25,7 @@ public class Main {
 //        CompletableFuture cf = CompletableFuture.supplyAsync(mySup, myPool);
 //        System.out.println("Degree of parallelism: " + myPool.getParallelism());
 
-//        System.out.println("Degree of parallelism: " + ForkJoinPool.getCommonPoolParallelism());
+        System.out.println("Default degree of parallelism of my Computer: " + ForkJoinPool.getCommonPoolParallelism());
 
 //        int threadCount = 4;
 //        ForkJoinPool pool = new ForkJoinPool(threadCount);
@@ -37,11 +37,12 @@ public class Main {
 //                " stealCount=" + pool.getStealCount());
 
         Random random = new Random();
-        int[] array = new int[2000000];
+        int[] array = new int[2500000];
         ArrayList<Long> timeList = new ArrayList<>();
         for (int j = 50; j < 100; j++) {
-            ParSort.cutoff = 10000 * (j + 1);
-            // for (int i = 0; i < array.length; i++) array[i] = random.nextInt(10000000);
+//            ParSort.cutoff = 10000 * (j + 1);
+//            ParSort.cutoff = 7500 * (j + 1);
+            ParSort.cutoff = 12500 * (j + 1);
             long time;
             long startTime = System.currentTimeMillis();
             for (int t = 0; t < 10; t++) {
@@ -56,22 +57,25 @@ public class Main {
             System.out.println("cutoff：" + (ParSort.cutoff) + "\t\t10times Time:" + time + "ms");
 
         }
-        try {
-            FileOutputStream fis = new FileOutputStream("./src/result_thread64.csv");
-            OutputStreamWriter isr = new OutputStreamWriter(fis);
-            BufferedWriter bw = new BufferedWriter(isr);
-            int j = 50;
-            for (long i : timeList) {
-                String content = (double) 10000 * (j + 1) / 2000000 + "," + (double) i / 10 + "\n";
-                j++;
-                bw.write(content);
-                bw.flush();
-            }
-            bw.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // out put result to file
+//        try {
+//            FileOutputStream fis = new FileOutputStream("./src/result_size2_thread2.csv");
+//            OutputStreamWriter isr = new OutputStreamWriter(fis);
+//            BufferedWriter bw = new BufferedWriter(isr);
+//            int j = 50;
+//            for (long i : timeList) {
+////                String content = (double) 10000 * (j + 1) / 2000000 + "," + (double) i / 10 + "\n";
+////                String content = (double) 7500 * (j + 1) / 1500000 + "," + (double) i / 10 + "\n";
+//                String content = (double) 12500 * (j + 1) / 2500000 + "," + (double) i / 10 + "\n";
+//                j++;
+//                bw.write(content);
+//                bw.flush();
+//            }
+//            bw.close();
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private static void processArgs(String[] args) {
