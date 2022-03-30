@@ -2,10 +2,10 @@ package edu.neu.coe.info6205.sort.par;
 
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ForkJoinPool;
 
 /**
  * This code has been fleshed out by Ziyao Qiao. Thanks very much.
- * TODO tidy it up a bit.
  */
 class ParSort {
 
@@ -15,22 +15,23 @@ class ParSort {
         if (to - from < cutoff) Arrays.sort(array, from, to);
         else {
             // FIXME next few lines should be removed from public repo.
-            CompletableFuture<int[]> parsort1 = parsort(array, from, from + (to - from) / 2); // TO IMPLEMENT
-            CompletableFuture<int[]> parsort2 = parsort(array, from + (to - from) / 2, to); // TO IMPLEMENT
+            CompletableFuture<int[]> parsort1 = parsort(array, from, from + (to - from) / 2);
+            CompletableFuture<int[]> parsort2 = parsort(array, from + (to - from) / 2, to);
+
             CompletableFuture<int[]> parsort = parsort1.thenCombine(parsort2, (xs1, xs2) -> {
                 int[] result = new int[xs1.length + xs2.length];
-                // TO IMPLEMENT
+                // merge two parts
                 int i = 0;
                 int j = 0;
-                for (int k = 0; k < result.length; k++) {
-                    if (i >= xs1.length) {
+                for(int k = 0; k < result.length; k++) {
+                    if(i > xs1.length - 1) {
                         result[k] = xs2[j++];
-                    } else if (j >= xs2.length) {
+                    }else if(j > xs2.length - 1) {
                         result[k] = xs1[i++];
-                    } else if (xs2[j] < xs1[i]) {
+                    }else if(xs1[i] < xs2[j]) {
+                        result[k] = xs1[i++];
+                    }else {
                         result[k] = xs2[j++];
-                    } else {
-                        result[k] = xs1[i++];
                     }
                 }
                 return result;
@@ -50,7 +51,7 @@ class ParSort {
                     System.arraycopy(array, from, result, 0, result.length);
                     sort(result, 0, to - from);
                     return result;
-                }
+                }, new ForkJoinPool(64)
         );
     }
 }

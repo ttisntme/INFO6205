@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ForkJoinPool;
 
 /**
@@ -18,7 +19,23 @@ public class Main {
 
     public static void main(String[] args) {
         processArgs(args);
-        System.out.println("Degree of parallelism: " + ForkJoinPool.getCommonPoolParallelism());
+
+//        int threadCount = 2;
+//        ForkJoinPool myPool = new ForkJoinPool(threadCount);
+//        CompletableFuture cf = CompletableFuture.supplyAsync(mySup, myPool);
+//        System.out.println("Degree of parallelism: " + myPool.getParallelism());
+
+//        System.out.println("Degree of parallelism: " + ForkJoinPool.getCommonPoolParallelism());
+
+//        int threadCount = 4;
+//        ForkJoinPool pool = new ForkJoinPool(threadCount);
+//        System.out.println(" activeThreads=" + pool.getActiveThreadCount() +
+//                " runningThreads=" + pool.getRunningThreadCount() +
+//                " poolSize=" + pool.getPoolSize() +" queuedTasks=" + pool.getQueuedTaskCount() +
+//                " queuedSubmissions=" + pool.getQueuedSubmissionCount() +
+//                " parallelism=" + pool.getParallelism() +
+//                " stealCount=" + pool.getStealCount());
+
         Random random = new Random();
         int[] array = new int[2000000];
         ArrayList<Long> timeList = new ArrayList<>();
@@ -40,10 +57,10 @@ public class Main {
 
         }
         try {
-            FileOutputStream fis = new FileOutputStream("./src/result.csv");
+            FileOutputStream fis = new FileOutputStream("./src/result_thread64.csv");
             OutputStreamWriter isr = new OutputStreamWriter(fis);
             BufferedWriter bw = new BufferedWriter(isr);
-            int j = 0;
+            int j = 50;
             for (long i : timeList) {
                 String content = (double) 10000 * (j + 1) / 2000000 + "," + (double) i / 10 + "\n";
                 j++;
